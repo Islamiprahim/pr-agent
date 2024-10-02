@@ -1,0 +1,33 @@
+import pandas as pd
+import yfinance as yf
+import numpy as np
+import matplotlib.pyplot as plt
+
+# تحميل بيانات الأسهم (استبدل 'AAPL' برمز السهم الذي تريده)
+symbol = 'AAPL'
+data = yf.download(symbol, start='2023-01-01', end='2024-01-01')
+
+# استخدام سعر الإغلاق
+prices = data['Close']
+
+# إعداد نقاط الشراء والبيع
+mean_price = prices.mean()
+buy_signals = prices[prices < mean_price]
+sell_signals = prices[prices > mean_price]
+
+# رسم البيانات
+plt.figure(figsize=(12, 6))
+plt.plot(prices.index, prices, label='سعر السهم', color='blue')
+
+# إضافة مثلثات الشراء
+plt.scatter(buy_signals.index, buy_signals, marker='^', color='green', s=100, label='نقطة الشراء')
+# إضافة مثلثات البيع
+plt.scatter(sell_signals.index, sell_signals, marker='v', color='red', s=100, label='نقطة البيع')
+
+# إعدادات الرسم
+plt.title(f'استراتيجية التداول ل {symbol}')
+plt.xlabel('التاريخ')
+plt.ylabel('السعر')
+plt.legend()
+plt.grid()
+plt.show()
